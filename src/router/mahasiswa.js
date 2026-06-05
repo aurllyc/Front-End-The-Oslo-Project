@@ -1,6 +1,5 @@
 const mahasiswaRoutes = [
   //  AUTH Routes
-
   {
     path: '/mahasiswa/login',
 
@@ -39,13 +38,20 @@ const mahasiswaRoutes = [
   },
 
   //  DASHBOARD Route
-
   {
-    path: '/mahasiswa/dashboard',
+    path: '/mahasiswa',
 
-    name: 'mahasiswa-dashboard',
+    component: () => import('@/layouts/mahasiswa/MahasiswaDashboardLayout.vue'),
 
-    component: () => import('@/views/mahasiswa/dashboard/MahasiswaDashboardView.vue'),
+    children: [
+      {
+        path: 'dashboard',
+
+        name: 'mahasiswa-dashboard',
+
+        component: () => import('@/views/mahasiswa/dashboard/MahasiswaDashboardView.vue'),
+      },
+    ],
   },
 ]
 
