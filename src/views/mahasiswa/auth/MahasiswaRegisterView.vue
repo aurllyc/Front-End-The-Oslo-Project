@@ -148,68 +148,161 @@ import Checkbox from 'primevue/checkbox'
               <!-- TITLE -->
               <div class="mt-4 text-center">
                 <h1 class="text-2xl font-bold">
-                  Masuk sebagai
+                  Daftar sebagai
                   <span class="text-blue-700">Mahasiswa</span>
                 </h1>
 
-                <p class="text-gray-400">Gunakan akun kampus Anda untuk melanjutkan.</p>
+                <p class="text-gray-400">Lengkapi formulir di bawah ini untuk mendaftar.</p>
               </div>
 
               <!-- FORM -->
+              <!-- FORM -->
+
               <form>
-                <div class="mt-10 space-y-6">
-                  <div>
-                    <label class="mb-2 block font-medium"> NIM / Email </label>
+                <div class="mt-10 space-y-5">
+                  <!-- ROW 1 -->
 
-                    <InputText
-                      class="w-full"
-                      type="text"
-                      placeholder="Masukan NIM atau email kampus"
-                    />
-                  </div>
+                  <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <!-- NAMA -->
 
-                  <div>
-                    <label class="mb-2 block font-medium"> Password </label>
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800"> Nama Lengkap </label>
 
-                    <Password
-                      class="w-full"
-                      inputClass="w-full"
-                      :feedback="false"
-                      toggleMask
-                      placeholder="Masukan password"
-                    />
-                  </div>
-
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                      <Checkbox binary />
-
-                      <span>Ingat saya</span>
+                      <InputText
+                        class="w-full rounded-xl"
+                        placeholder="Masukkan nama lengkap Anda"
+                      />
                     </div>
 
-                    <a
-                      href="/mahasiswa/forgot-password"
-                      class="font-sm text-blue-700 hover:text-blue-500"
-                    >
-                      Lupa Password?
-                    </a>
+                    <!-- NIM -->
+
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800"> NIM </label>
+
+                      <InputText class="w-full rounded-xl" placeholder="Masukkan NIM Anda" />
+                    </div>
                   </div>
 
+                  <!-- ROW 2 -->
+
+                  <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <!-- EMAIL -->
+
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800"> Email Kampus </label>
+
+                      <InputText class="w-full rounded-xl" placeholder="nama@amikom.ac.id" />
+                    </div>
+
+                    <!-- NO HP -->
+
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800"> No. HP </label>
+
+                      <InputText class="w-full rounded-xl" placeholder="08xxxxxxxxxx" />
+                    </div>
+                  </div>
+
+                  <!-- PROGRAM STUDI -->
+
+                  <div>
+                    <label class="mb-2 block font-medium text-slate-800"> Program Studi </label>
+
+                    <select
+                      class="h-12 w-full rounded-xl border border-slate-300 bg-white px-4 text-slate-700 outline-none transition focus:border-blue-500"
+                    >
+                      <option selected disabled>Pilih program studi Anda</option>
+
+                      <option>S1 Informatika</option>
+
+                      <option>S1 Sistem Informasi</option>
+
+                      <option>S1 Teknologi Informasi</option>
+                    </select>
+                  </div>
+
+                  <!-- PASSWORD -->
+
+                  <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <!-- PASSWORD -->
+
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800"> Password </label>
+
+                      <Password
+                        class="w-full"
+                        inputClass="
+            w-full
+            rounded-xl
+          "
+                        :feedback="false"
+                        toggleMask
+                        placeholder="Masukkan password"
+                      />
+                    </div>
+
+                    <!-- KONFIRMASI -->
+
+                    <div>
+                      <label class="mb-2 block font-medium text-slate-800">
+                        Konfirmasi Password
+                      </label>
+
+                      <Password
+                        class="w-full"
+                        inputClass="
+            w-full
+            rounded-xl
+          "
+                        :feedback="false"
+                        toggleMask
+                        placeholder="Konfirmasi password"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- TERMS -->
+
+                  <div class="flex items-start gap-3">
+                    <Checkbox binary />
+
+                    <p class="text-sm leading-6 text-gray-600">
+                      Saya menyetujui
+
+                      <span class="cursor-pointer font-medium text-blue-700 hover:underline">
+                        syarat & ketentuan
+                      </span>
+
+                      dan
+
+                      <span class="cursor-pointer font-medium text-blue-700 hover:underline">
+                        kebijakan privasi
+                      </span>
+                    </p>
+                  </div>
+
+                  <!-- BUTTON -->
+
                   <Button
-                    label="Masuk"
+                    label="Daftar"
                     size="large"
                     raised
-                    class="w-full !bg-blue-700 !border-blue-700 hover:!bg-blue-800 hover:!border-blue-800 !text-white"
+                    class="w-full !rounded-xl !bg-blue-700 !border-blue-700 !py-3 !text-base !font-semibold !text-white hover:!bg-blue-800 hover:!border-blue-800"
                   />
+
+                  <!-- LOGIN -->
+
                   <div class="flex items-center justify-center">
-                    <span class="text-sm text-gray-500"
-                      >Belum punya akun?
+                    <span class="text-sm text-gray-500">
+                      Sudah punya akun?
+
                       <a
-                        href="/mahasiswa/register"
-                        class="text-blue-700 hover:text-blue-500 hover:underline"
-                        >Daftar sekarang</a
-                      ></span
-                    >
+                        href="/mahasiswa/login"
+                        class="font-medium text-blue-700 hover:text-blue-500 hover:underline"
+                      >
+                        Masuk sekarang
+                      </a>
+                    </span>
                   </div>
                 </div>
               </form>
@@ -226,7 +319,7 @@ import Checkbox from 'primevue/checkbox'
 
             <p class="text-sm text-gray-500">
               Hubungi
-              <a href="" class="font-medium text-blue-700 hover:text-blue-500 hover:underline"
+              <a href="#" class="font-medium text-blue-700 hover:text-blue-500 hover:underline"
                 >admin Program Studi</a
               >
               jika mengalami kendala akses.

@@ -1,5 +1,5 @@
 <script setup>
-import MahasiswaAuthLayout from '@/layouts/mahasiswa/MahasiswaAuthLayout.vue'
+import DosenAuthLayout from '@/layouts/dosen/DosenAuthLayout.vue'
 import Card from 'primevue/card'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
@@ -8,9 +8,9 @@ import Checkbox from 'primevue/checkbox'
 </script>
 
 <template>
-  <MahasiswaAuthLayout>
+  <DosenAuthLayout>
     <!-- LEFT SECTION -->
-    <section class="hidden lg:flex flex-col justify-between bg-[#CFE1FF] p-14">
+    <section class="hidden lg:flex flex-col justify-between bg-purple-50 p-14">
       <div class="flex flex-col gap-6 justify-between">
         <!-- LOGO -->
         <div>
@@ -20,10 +20,10 @@ import Checkbox from 'primevue/checkbox'
         <!-- BADGE -->
         <div>
           <div
-            class="inline-flex items-center gap-2 rounded-full bg-blue-100 px-5 py-2 text-blue-700"
+            class="inline-flex items-center gap-2 rounded-full bg-purple-100 px-5 py-2 text-purple-700"
           >
             <i class="pi pi-graduation-cap" style="font-size: 1.2rem"></i>
-            <span class="font-medium">Portal Mahasiswa</span>
+            <span class="font-medium">Portal Dosen Pembimbing</span>
           </div>
         </div>
 
@@ -31,7 +31,7 @@ import Checkbox from 'primevue/checkbox'
         <div class="flex flex-col gap-1 justify-between">
           <h2 class="text-3xl font-medium text-gray-900">Selamat Datang,</h2>
 
-          <h1 class="text-6xl font-bold text-blue-700">Mahasiswa!</h1>
+          <h1 class="text-6xl font-bold text-purple-700">Dosen Pembimbing!</h1>
 
           <p class="max-w-md text-md text-gray-500">
             Kelola pengajuan magang, isi log book, pantau progres, dan selesaikan proses magang
@@ -107,7 +107,7 @@ import Checkbox from 'primevue/checkbox'
 
                   <h1 class="text-2xl font-bold">2</h1>
 
-                  <p class="text-xs text-gray-500">Mahasiswa</p>
+                  <p class="text-xs text-gray-500">Dosen Pembimbing</p>
                 </div>
               </div>
             </template>
@@ -116,16 +116,16 @@ import Checkbox from 'primevue/checkbox'
       </div>
 
       <!-- SECURITY -->
-      <div class="mt-6 flex items-center gap-4 rounded-2xl bg-blue-100 px-4 py-3">
+      <div class="mt-6 flex items-center gap-4 rounded-2xl bg-purple-100 px-4 py-3">
         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-white">
-          <i class="pi pi-shield text-2xl text-blue-700"></i>
+          <i class="pi pi-shield text-2xl text-purple-700"></i>
         </div>
 
         <div>
           <h1 class="font-semibold text-gray-800">Akses Aman</h1>
 
           <p class="text-sm text-gray-500">
-            Sistem ini dilindungi dan hanya dapat diakses oleh mahasiswa terdaftar.
+            Sistem ini dilindungi dan hanya dapat diakses oleh dosen Pembimbing terdaftar.
           </p>
         </div>
       </div>
@@ -140,8 +140,8 @@ import Checkbox from 'primevue/checkbox'
             <div class="px-6 py-4">
               <!-- ICON -->
               <div class="flex justify-center">
-                <div class="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
-                  <i class="pi pi-graduation-cap text-blue-700" style="font-size: 2.5rem"></i>
+                <div class="flex h-20 w-20 items-center justify-center rounded-full bg-purple-100">
+                  <i class="pi pi-graduation-cap text-purple-700" style="font-size: 2.5rem"></i>
                 </div>
               </div>
 
@@ -149,7 +149,7 @@ import Checkbox from 'primevue/checkbox'
               <div class="mt-4 text-center">
                 <h1 class="text-2xl font-bold">
                   Masuk sebagai
-                  <span class="text-blue-700">Mahasiswa</span>
+                  <span class="text-purple-700">Dosen Pembimbing</span>
                 </h1>
 
                 <p class="text-gray-400">Gunakan akun kampus Anda untuk melanjutkan.</p>
@@ -161,11 +161,7 @@ import Checkbox from 'primevue/checkbox'
                   <div>
                     <label class="mb-2 block font-medium"> NIM / Email </label>
 
-                    <InputText
-                      class="w-full"
-                      type="text"
-                      placeholder="Masukan NIM atau email kampus"
-                    />
+                    <InputText class="w-full" placeholder="Masukan NIM atau email kampus" />
                   </div>
 
                   <div>
@@ -187,10 +183,7 @@ import Checkbox from 'primevue/checkbox'
                       <span>Ingat saya</span>
                     </div>
 
-                    <a
-                      href="/mahasiswa/forgot-password"
-                      class="font-sm text-blue-700 hover:text-blue-500"
-                    >
+                    <a href="#" class="font-medium text-purple-700 hover:text-purple-500">
                       Lupa Password?
                     </a>
                   </div>
@@ -199,18 +192,25 @@ import Checkbox from 'primevue/checkbox'
                     label="Masuk"
                     size="large"
                     raised
-                    class="w-full !bg-blue-700 !border-blue-700 hover:!bg-blue-800 hover:!border-blue-800 !text-white"
+                    class="w-full !bg-purple-700 !border-purple-700 hover:!bg-purple-800 hover:!border-purple-800 !text-white"
                   />
-                  <div class="flex items-center justify-center">
-                    <span class="text-sm text-gray-500"
-                      >Belum punya akun?
-                      <a
-                        href="/mahasiswa/register"
-                        class="text-blue-700 hover:text-blue-500 hover:underline"
-                        >Daftar sekarang</a
-                      ></span
-                    >
-                  </div>
+
+                  <!-- DIVIDER -->
+                  <!-- <div class="flex items-center gap-4">
+                  <div class="h-px flex-1 bg-gray-300"></div>
+
+                  <span class="text-gray-400">atau</span>
+
+                  <div class="h-px flex-1 bg-gray-300"></div>
+                </div>
+
+                <Button
+                  label="Masuk dengan Google"
+                  outlined
+                  severity="secondary"
+                  class="w-full"
+                  size="large"
+                /> -->
                 </div>
               </form>
             </div>
@@ -218,7 +218,7 @@ import Checkbox from 'primevue/checkbox'
         </Card>
 
         <!-- HELP -->
-        <div class="mt-6 flex items-center gap-4 rounded-2xl bg-blue-100 p-4">
+        <div class="mt-6 flex items-center gap-4 rounded-2xl bg-purple-100 p-4">
           <i class="pi pi-headphones text-3xl"></i>
 
           <div>
@@ -226,7 +226,7 @@ import Checkbox from 'primevue/checkbox'
 
             <p class="text-sm text-gray-500">
               Hubungi
-              <a href="" class="font-medium text-blue-700 hover:text-blue-500 hover:underline"
+              <a href="#" class="font-medium text-purple-700 hover:text-purple-500 hover:underline"
                 >admin Program Studi</a
               >
               jika mengalami kendala akses.
@@ -236,9 +236,9 @@ import Checkbox from 'primevue/checkbox'
 
         <!-- FOOTER -->
         <div class="mt-10 text-center text-sm text-gray-400">
-          The Oslo Project - Sistem Magang Mahasiswa 2026
+          The Oslo Project - Sistem Informasi Magang 2026
         </div>
       </div>
     </section>
-  </MahasiswaAuthLayout>
+  </DosenAuthLayout>
 </template>

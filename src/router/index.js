@@ -1,30 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import MahasiswaLoginView from '@/views/mahasiswa/auth/MahasiswaLoginView.vue'
-import MahasiswaDashboardView from '@/views/mahasiswa/dashboard/MahasiswaDashboardView.vue'
+import mahasiswaRoutes from './mahasiswa'
 
-const routes = [
-  {
-    path: '/',
-    redirect: '/mahasiswa/auth/login',
-  },
-
-  {
-    path: '/mahasiswa/auth/login',
-    name: 'mahasiswa-login',
-    component: MahasiswaLoginView,
-  },
-
-  {
-    path: '/mahasiswa/dashboard',
-    name: 'mahasiswa-dashboard',
-    component: MahasiswaDashboardView,
-  },
-]
+import dosenRoutes from './dosen'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+
+  routes: [
+    {
+      path: '/',
+
+      redirect: '/mahasiswa/login',
+    },
+
+    ...mahasiswaRoutes,
+
+    ...dosenRoutes,
+  ],
 })
 
 export default router
