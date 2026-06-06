@@ -1,0 +1,120 @@
+name: Cloud Build & Local STB Deploy (Vue FE)
+
+on:
+  push:
+    branches:
+      - development
+      - staging
+      - production
+
+jobs:
+  # ==========================================
+  # JOB 1: BUILD VUE (BERJALAN DI CLOUD GITHUB)
+  # ==========================================
+  build-cloud:
+    runs-on: ubuntu-latest
+    outputs:
+      target_port: ${{ steps.set-env.outputs.target_port }}
+      container_name: ${{ steps.set-env.outputs.container_name }}
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Lapor status running ke GitLab Anda
+      - name: Lapor ke GitLab (Proses Dimulai)
+        if: always()
+        run: |
+          curl --request POST \
+            --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_TOKEN }}" \
+            "https://gitlab.com/api/v4/projects/${{ github.event.repository.name }}/statuses/${{ github.sha }}?state=running&name=GitHub%20Runner&target_url=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      # Penentuan PORT, Nama Container, dan Mode Build Vue berdasarkan Branch
+      - name: Set Environment Target
+        id: set-env
+        run: |
+          if [ "${{ github.ref_name }}" = "production" ]; then
+            echo "target_port=8093" >> $GITHUB_OUTPUT
+            echo "container_name=vue_production" >> $GITHUB_OUTPUT
+            echo "build_mode=production" >> $GITHUB_OUTPUT
+          elif [ "${{ github.ref_name }}" = "staging" ]; then
+            echo "target_port=8092" >> $GITHUB_OUTPUT
+            echo "container_name=vue_staging" >> $GITHUB_OUTPUT
+            echo "build_mode=staging" >> $GITHUB_OUTPUT
+          else
+            echo "target_port=8094" >> $GITHUB_OUTPUT
+            echo "container_name=vue_development" >> $GITHUB_OUTPUT
+            echo "build_mode=development" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login ke GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Membangun Image ARM64 untuk STB dengan menyuntikkan--build-arg mode env Vue
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          build-args: |
+            BUILD_MODE=${{ steps.set-env.outputs.build_mode }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ==========================================
+  # JOB 2: DEPLOY (BERJALAN DI HOST STB B860H)
+  # ==========================================
+  deploy-stb:
+    needs: build-cloud
+    runs-on: [self-hosted, ARM64]
+    steps:
+      - name: Tarik Image dan Restart Container Podman
+        run: |
+          PORT="${{ needs.build-cloud.outputs.target_port }}"
+          CONTAINER="${{ needs.build-cloud.outputs.container_name }}"
+
+          echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+          echo "Menghentikan container lama jika ada..."
+          podman stop $CONTAINER || true
+          podman rm $CONTAINER || true
+
+          echo "Menarik image Vue terbaru..."
+          podman pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+          echo "Menjalankan container Vue di Port $PORT..."
+          # Jauh lebih simpel dari Laravel karena tidak butuh .env file eksternal maupun running command artisan php!
+          podman run -d --name $CONTAINER -p $PORT:80 ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+          echo "Deploy Frontend Berhasil!"
+
+      # Laporan Hasil Akhir ke GitLab
+      - name: Lapor ke GitLab (Sukses)
+        if: success()
+        run: |
+          GITLAB_PROJECT_PATH="frand-kod/the-oslo-project-fe" # <-- Sesuaikan dengan path repo FE Anda di GitLab
+          ENCODED_PATH=$(echo -n "$GITLAB_PROJECT_PATH" | sed 's/\//%2F/g')
+          curl --request POST --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${ENCODED_PATH}/statuses/${{ github.sha }}?state=success&name=GitHub%20Runner"
+
+      - name: Lapor ke GitLab (Gagal)
+        if: failure()
+        run: |
+          GITLAB_PROJECT_PATH="frand-kod/the-oslo-project-fe" # <-- Sesuaikan dengan path repo FE Anda di GitLab
+          ENCODED_PATH=$(echo -n "$GITLAB_PROJECT_PATH" | sed 's/\//%2F/g')
+          curl --request POST --header "PRIVATE-TOKEN: ${{ secrets.GITLAB_TOKEN }}" "https://gitlab.com/api/v4/projects/${ENCODED_PATH}/statuses/${{ github.sha }}?state=failed&name=GitHub%20Runner"
